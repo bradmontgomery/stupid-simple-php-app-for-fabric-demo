@@ -42,5 +42,3 @@ def set_apache_config():
     with cd("/home/web/stupid-simple-php-app-for-fabric-demo/apache/"):
         run("ln -s /etc/apache2/sites-enabled/000-default 000-default")
         run("apachectl restart")
-
-
