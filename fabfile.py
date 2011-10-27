@@ -9,7 +9,7 @@ def install_packages():
     run('apt-get install aptitude')
     run('aptitude update')
     run('aptitude upgrade')
-    run('aptitude install libapache2-mod-php5 php5 php-pgsql git')
+    run('aptitude install libapache2-mod-php5 php5 php-pgsql git postgresql')
 
 def deploy():
     """ Deploy our app by pulling it from github """
