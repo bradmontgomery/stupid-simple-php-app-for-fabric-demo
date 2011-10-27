@@ -1,5 +1,6 @@
 from fabric.api import run, cd
 from fabric.contrib.files import exists
+from fabric.operations import sudo
 
 def host_type():
     run('uname -s')
@@ -53,4 +54,21 @@ def revert():
     if exists("/root/stupid-simple-php-app-for-fabric-demo.tgz"):
         with cd("/home/web/"):
             run("tar -xzf /root/stupid-simple-php-app-for-fabric-demo.tgz")
+
+def db_setup():
+    """ set up a new database """
+    # Symlink our own config file and restart PostgreSQL
+    with cd("/etc/postgresql/8.4/main/"):
+        # remove the existing config file
+        if exists("pg_hba.conf"): 
+            run("rm pg_hba.conf")
+        run("ln -s /home/web/stupid-simple-php-app-for-fabric-demo/db/pg_hba.conf pg_hba.conf")
+        run("/etc/init.d/postgresql restart")
+    
+    # Create a superuser named "dbuser" and prompt for a password
+    sudo("createuser -s -P dbuser", user="postgres")
+    # Create a dabase named "appdb" owned by "dbuser"
+    sudo("createdb -E UTF8 -O dbuser -T template0 appdb", user="postgres")
+    # Run SQL from a file
+    run("psql -U dbuser -d appdb -f /home/web/stupid-simple-php-app-for-fabric-demo/db/db.sql")
 
