@@ -1,6 +1,8 @@
-from fabric.api import run, cd
+from fabric.api import cd, env, run
 from fabric.contrib.files import exists
 from fabric.operations import sudo
+
+env.hosts = ['root@demo1@noblinky.net', 'root@demo2@noblinky.net', ]
 
 def host_type():
     run('uname -s')
