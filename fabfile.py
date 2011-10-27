@@ -73,3 +73,25 @@ def db_setup():
     # Run SQL from a file
     run("psql -U dbuser -d appdb -f /home/web/stupid-simple-php-app-for-fabric-demo/db/db.sql")
 
+def down():
+    """ put the site into *maintenance mode* """
+    
+    # put an "out of order" page in place
+    if exists("/home/web/stupid-simple-php-app-for-fabric-demo/app/down.html"):
+        run("cat /home/web/stupid-simple-php-app-for-fabric-demo/app/down.html > /var/www/index.html")
+
+    # Update Apache config
+    with cd("/etc/apache2/sites-enabled/"):
+        if exists("/etc/apache2/sites-enabled/000-default"):
+            run("rm /etc/apache2/sites-enabled/000-default")
+        run("ln -s /home/web/stupid-simple-php-app-for-fabric-demo/apache/down down")
+        run("apachectl restart")
+
+def up():
+    """ pull the site out of *maintenance mode* """
+    # replace the production apache config
+    with cd("/etc/apache2/sites-enabled/"):
+        if exists("/etc/apache2/sites-enabled/down"):
+            run("rm /etc/apache2/sites-enabled/down")
+        run("ln -s /home/web/stupid-simple-php-app-for-fabric-demo/apache/000-default 000-default")
+        run("apachectl restart")
