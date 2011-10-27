@@ -32,3 +32,15 @@ def set_file_permissions():
     with cd("/home/web/stupid-simple-php-app-for-fabric-demo/"):
         run("chmod -R 0755 app/")
         run("chown -R root:www-data app/")
+
+def set_apache_config():
+    """ Replace's apache's default config file """
+    # Delete the existing default config file.
+    if exists("/etc/apache2/sites-enabled/000-default"):
+        run("rm /etc/apache2/sites-enabled/000-default")
+
+    with cd("/home/web/stupid-simple-php-app-for-fabric-demo/apache/"):
+        run("ln -s /etc/apache2/sites-enabled/000-default 000-default")
+        run("apachectl restart")
+
+
