@@ -26,3 +26,9 @@ def deploy():
         with cd("/home/web/stupid-simple-php-app-for-fabric-demo"):
             # Fetch & Merge from the remote repo
             run('git pull git://github.com/bradmontgomery/stupid-simple-php-app-for-fabric-demo.git')
+
+def set_file_permissions():
+    """ Sets the appropriate read/execute permissions """
+    with cd("/home/web/stupid-simple-php-app-for-fabric-demo/"):
+        run("chmod -R 0755 app/")
+        run("chown -R root:www-data app/")
