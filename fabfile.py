@@ -39,6 +39,18 @@ def set_apache_config():
     if exists("/etc/apache2/sites-enabled/000-default"):
         run("rm /etc/apache2/sites-enabled/000-default")
 
-    with cd("/home/web/stupid-simple-php-app-for-fabric-demo/apache/"):
-        run("ln -s /etc/apache2/sites-enabled/000-default 000-default")
+    with cd("/etc/apache2/sites-enabled/"):
+        run("ln -s /home/web/stupid-simple-php-app-for-fabric-demo/apache/000-default .")
         run("apachectl restart")
+
+def backup():
+    """ Make a tarball snapshot of the deployed codebase """
+    with cd("/home/web/"):
+        run("tar -czf /root/stupid-simple-php-app-for-fabric-demo.tgz stupid-simple-php-app-for-fabric-demo/")
+
+def revert():
+    """ Revert the codebase from a backup """
+    if exists("/root/stupid-simple-php-app-for-fabric-demo.tgz"):
+        with cd("/home/web/"):
+            run("tar -xzf /root/stupid-simple-php-app-for-fabric-demo.tgz")
+
