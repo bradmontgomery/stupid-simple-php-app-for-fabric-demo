@@ -19,6 +19,7 @@ ini_set('display_errors', true);
         }
         echo '</ul>';
     }
+    echo '<p>' . date("m/d/Y") . '</p>';
 ?>
 </body>
 </html>
